@@ -25,8 +25,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
       maxLength: 3,
       maxLengthHtml: 'selected',
       iconCheckmark: 'glyphicon glyphicon-ok',
-      toggle: false,
-      touchClickEmulationDisabled: false
+      toggle: false
     };
 
     this.$get = function ($window, $document, $rootScope, $tooltip, $timeout) {
@@ -191,7 +190,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
           evt.preventDefault();
           evt.stopPropagation();
           // Emulate click for mobile devices
-          if (isTouch && !options.touchClickEmulationDisabled) {
+          if (isTouch) {
             var targetEl = angular.element(evt.target);
             var anchor;
 
@@ -306,13 +305,13 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
 
         // Directive options
         var options = {scope: scope, placeholder: defaults.placeholder};
-        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'placeholder', 'allNoneButtons', 'maxLength', 'maxLengthHtml', 'allText', 'noneText', 'iconCheckmark', 'autoClose', 'id', 'sort', 'caretHtml', 'prefixClass', 'prefixEvent', 'toggle', 'touchClickEmulationDisabled'], function (key) {
+        angular.forEach(['template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'placeholder', 'allNoneButtons', 'maxLength', 'maxLengthHtml', 'allText', 'noneText', 'iconCheckmark', 'autoClose', 'id', 'sort', 'caretHtml', 'prefixClass', 'prefixEvent', 'toggle'], function (key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
 
         // use string regex match boolean attr falsy values, leave truthy values be
         var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach(['html', 'container', 'allNoneButtons', 'sort', 'touchClickEmulationDisabled'], function (key) {
+        angular.forEach(['html', 'container', 'allNoneButtons', 'sort'], function (key) {
           if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
             options[key] = false;
           }
