@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.3.12 - 2017-01-26
+ * @version v2.3.12 - 2018-03-28
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -29,7 +29,8 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
     maxLength: 3,
     maxLengthHtml: 'selected',
     iconCheckmark: 'glyphicon glyphicon-ok',
-    toggle: false
+    toggle: false,
+    touchClickEmulationDisabled: false
   };
   this.$get = [ '$window', '$document', '$rootScope', '$tooltip', '$timeout', function($window, $document, $rootScope, $tooltip, $timeout) {
     var isNative = /(ip[ao]d|iphone|android)/gi.test($window.navigator.userAgent);
@@ -166,7 +167,7 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
       $select.$onMouseDown = function(evt) {
         evt.preventDefault();
         evt.stopPropagation();
-        if (isTouch) {
+        if (isTouch && !options.touchClickEmulationDisabled) {
           var targetEl = angular.element(evt.target);
           var anchor;
           if (evt.target.nodeName !== 'A') {
@@ -252,11 +253,11 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
         scope: scope,
         placeholder: defaults.placeholder
       };
-      angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'placeholder', 'allNoneButtons', 'maxLength', 'maxLengthHtml', 'allText', 'noneText', 'iconCheckmark', 'autoClose', 'id', 'sort', 'caretHtml', 'prefixClass', 'prefixEvent', 'toggle' ], function(key) {
+      angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'placeholder', 'allNoneButtons', 'maxLength', 'maxLengthHtml', 'allText', 'noneText', 'iconCheckmark', 'autoClose', 'id', 'sort', 'caretHtml', 'prefixClass', 'prefixEvent', 'toggle', 'touchClickEmulationDisabled' ], function(key) {
         if (angular.isDefined(attr[key])) options[key] = attr[key];
       });
       var falseValueRegExp = /^(false|0|)$/i;
-      angular.forEach([ 'html', 'container', 'allNoneButtons', 'sort' ], function(key) {
+      angular.forEach([ 'html', 'container', 'allNoneButtons', 'sort', 'touchClickEmulationDisabled' ], function(key) {
         if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
           options[key] = false;
         }
@@ -278,7 +279,7 @@ angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngSt
       if (element[0].nodeName.toLowerCase() === 'select') {
         var inputEl = element;
         inputEl.css('display', 'none');
-        element = angular.element('<button type="button" class="btn btn-default"></button>');
+        element = angular.element('<button type="button" class="btn btn-default" aria-haspopup="true"></button>');
         inputEl.after(element);
       }
       var parsedOptions = $parseOptions(attr.bsOptions);
